@@ -23,21 +23,20 @@
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_marginTop="20dp"
-        android:onClick="ring"
+        android:onClick="alarm"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headline"
         android:text="Ring" />
 
-    <Button
-        android:id="@+id/button_vibrate"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_marginTop="20dp"
-        android:onClick="vibrate"
+    <ImageView
+        android:id="@+id/alarm_icon"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/ic_echo_bell"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_ring"
-        android:text="Vibrate" />
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

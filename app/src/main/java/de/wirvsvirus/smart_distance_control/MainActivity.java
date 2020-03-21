@@ -12,14 +12,14 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity {
 
-    private VibrationManager vibrate;
-    private RingManager ring;
+    private AlarmManager alarmManager;
 
 
     private BluetoothAdapter BTAdapter;
@@ -41,11 +41,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         this.BTAdapter = BluetoothAdapter .getDefaultAdapter();
 
 
        vibrate = new VibrationManager(getApplicationContext());
         ring = new RingManager(getApplicationContext());
+
+       alarmManager = new AlarmManager(getApplicationContext(), (ImageView) findViewById(R.id.alarm_icon));
+
 
         BTAdapter = BluetoothAdapter .getDefaultAdapter();
 
@@ -89,11 +93,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void ring(View v) {
-        ring.ring();
+    public void alarm(View v) {
+        alarmManager.alarm(AlarmManager.SEVERITY_LIGHT,0);
     }
 
-    public void vibrate(View v) {
-        vibrate.vibrate();
-    }
 }
