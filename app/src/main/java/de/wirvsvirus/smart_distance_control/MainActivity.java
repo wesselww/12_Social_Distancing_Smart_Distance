@@ -11,11 +11,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity {
+
+    private AlarmManager alarmManager;
+
+
     private BluetoothAdapter BTAdapter;
     public static int REQUEST_BLUETOOTH = 1;
     private CountDownTimer timerBTDiscovery;
@@ -34,7 +40,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         this.BTAdapter = BluetoothAdapter .getDefaultAdapter();
+
+
+       alarmManager = new AlarmManager(getApplicationContext(), (ImageView) findViewById(R.id.alarm_icon));
+
+
+        BTAdapter = BluetoothAdapter .getDefaultAdapter();
+
         if (BTAdapter == null){
             new AlertDialog.Builder(this)
                     .setTitle("Error")
@@ -73,4 +88,10 @@ public class MainActivity extends AppCompatActivity {
 
         return dDistance;
     }
+
+
+    public void alarm(View v) {
+        alarmManager.alarm(20,0);
+    }
+
 }
