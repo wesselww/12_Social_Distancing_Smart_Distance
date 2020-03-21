@@ -7,16 +7,15 @@ import android.net.Uri;
 
 public class RingManager {
 
-    private Context ctx;
+    Uri notification;
+    Ringtone r;
 
     public RingManager(Context ctx) {
-        this.ctx = ctx;
+        this.notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        this.r = RingtoneManager.getRingtone(ctx, notification);
     }
 
     public void ring() {
-        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        Ringtone r = RingtoneManager.getRingtone(ctx, notification);
-
         if ( r.isPlaying()) {
             r.stop();
         } else {

@@ -14,7 +14,6 @@ public class VibrationManager {
     }
 
     public void vibrate() {
-
         Vibrator v = (Vibrator) ctx.getSystemService(Context.VIBRATOR_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
