@@ -25,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
-                Toast.makeText(getApplicationContext(),"Device Name:" + device.getName() +"  RSSI: " + rssi + "dBm", Toast.LENGTH_SHORT).show();
+                RSSI2DISTANCE rssi2distance = new RSSI2DISTANCE(1.5,2.5);
+                Toast.makeText(getApplicationContext(),"Device Name:" + device.getName() +"  RSSI: " + rssi + "dBm "+"Abstand: "+ rssi2distance.getDistance(rssi) + "m", Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -67,7 +68,9 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(enableBT, REQUEST_BLUETOOTH);
         }
     }
-    protected void discoverBluetoothDevices(){
+    protected double getDistance(int rssi){
+        double dDistance = 0.0;
 
+        return dDistance;
     }
 }
