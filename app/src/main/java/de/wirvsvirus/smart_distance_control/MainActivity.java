@@ -45,9 +45,6 @@ public class MainActivity extends AppCompatActivity {
         this.BTAdapter = BluetoothAdapter .getDefaultAdapter();
 
 
-       vibrate = new VibrationManager(getApplicationContext());
-        ring = new RingManager(getApplicationContext());
-
        alarmManager = new AlarmManager(getApplicationContext(), (ImageView) findViewById(R.id.alarm_icon));
 
 
@@ -94,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void alarm(View v) {
-        alarmManager.alarm(AlarmManager.SEVERITY_LIGHT,0);
+        alarmManager.alarm(20,0);
     }
 
 }

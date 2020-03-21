@@ -12,9 +12,9 @@ import android.widget.ImageView;
 
 public class AlarmManager {
 
-    public static final int SEVERITY_SEVERE = 0;
-    public static final int SEVERITY_MEDIUM = 1;
-    public static final int SEVERITY_LIGHT = 2;
+    public static final int SEVERITY_NO = 0;
+    public static final int SEVERITY_MEDIUM = 2;
+    public static final int SEVERITY_SEVERE = 3;
 
     private Context ctx;
     Uri notification;
@@ -28,20 +28,32 @@ public class AlarmManager {
         this.alarmImage = alarmImage;
     }
 
-    public void alarm(int severity, int lenght) {
+    public void alarm(int distance, int lenght) {
         ring();
         vibrate();
+
+        setSeverity(distance);
+    }
+
+    private void setSeverity(int distance) {
+        int severity = SEVERITY_NO;
+
+        if (distance < 200 && distance > 150) {
+            severity = SEVERITY_MEDIUM;
+        } else if (distance < 150) {
+            severity = SEVERITY_SEVERE;
+        }
 
         if (severity == SEVERITY_SEVERE) {
             alarmImage.setColorFilter(Color.RED);
         } else if (severity == SEVERITY_MEDIUM) {
             alarmImage.setColorFilter(Color.YELLOW);
-        } else if (severity == SEVERITY_LIGHT) {
+        } else if (severity == SEVERITY_NO) {
             alarmImage.setColorFilter(Color.GREEN);
         }
     }
 
-    public void vibrate() {
+    private void vibrate() {
         Vibrator v = (Vibrator) ctx.getSystemService(Context.VIBRATOR_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -52,7 +64,7 @@ public class AlarmManager {
 
     }
 
-    public void ring() {
+    private void ring() {
         if (r.isPlaying()) {
             r.stop();
         } else {
