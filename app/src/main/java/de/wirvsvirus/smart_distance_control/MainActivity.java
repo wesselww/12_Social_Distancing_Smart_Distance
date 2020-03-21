@@ -10,17 +10,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.widget.Toast;
+
+import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity {
     private BluetoothAdapter BTAdapter;
     public static int REQUEST_BLUETOOTH = 1;
+    private CountDownTimer timerBTDiscovery;
     private final BroadcastReceiver bReciever = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
-                Toast.makeText(getApplicationContext(),"  RSSI: " + rssi + "dBm", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Device Name:" + device.getName() +"  RSSI: " + rssi + "dBm", Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -28,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BTAdapter = BluetoothAdapter .getDefaultAdapter();
+        this.BTAdapter = BluetoothAdapter .getDefaultAdapter();
         if (BTAdapter == null){
             new AlertDialog.Builder(this)
                     .setTitle("Error")
@@ -43,6 +48,18 @@ public class MainActivity extends AppCompatActivity {
         }
         this.enableBluetooth();
         registerReceiver(bReciever, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+            this.timerBTDiscovery = new CountDownTimer(10000,1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    BTAdapter.startDiscovery() ;
+                    timerBTDiscovery.start();
+                }
+            }.start();
     }
     protected void enableBluetooth(){
         if (!this.BTAdapter.isEnabled()){
