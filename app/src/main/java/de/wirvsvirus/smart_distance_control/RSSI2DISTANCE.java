@@ -7,6 +7,9 @@ public class RSSI2DISTANCE {
     private  List<RSSI> lookUpTable;
     private double upperTreshhold;
     private  double lowerTreshold;
+   enum Farbe{
+       rot,gelb,gruen;
+   }
     public  RSSI2DISTANCE(){
         this(1.5,2.5);
     }
@@ -34,4 +37,17 @@ public class RSSI2DISTANCE {
         }
         return distance;
     }
+    public Farbe getDistanceAsColor(double rssi){
+       double distance = this.getDistance(rssi);
+       if (distance < this.lowerTreshold ){
+           return Farbe.rot;
+       }
+       else if ((distance > this.lowerTreshold) & (distance < this.upperTreshhold)){
+            return Farbe.gelb;
+           }
+       else {
+           return  Farbe.gruen;
+        }
+    }
+
 }
