@@ -32,10 +32,23 @@ public class AlarmManager {
         ring();
         vibrate();
 
-        setSeverity(distance);
+        int severity = getSeverity(distance);
+        int drawable = getDrawable(severity);
+
+        alarmImage.setImageDrawable( ctx.getResources().getDrawable( drawable ) );
     }
 
-    private void setSeverity(int distance) {
+    private int getDrawable(int severity) {
+        if (severity == SEVERITY_SEVERE) {
+            return R.drawable.bell_red;
+        } else if (severity == SEVERITY_MEDIUM) {
+            return R.drawable.bell_yellow;
+        } else {
+            return R.drawable.bell_green;
+        }
+    }
+
+    private int getSeverity(int distance) {
         int severity = SEVERITY_NO;
 
         if (distance < 200 && distance > 150) {
@@ -44,13 +57,7 @@ public class AlarmManager {
             severity = SEVERITY_SEVERE;
         }
 
-        if (severity == SEVERITY_SEVERE) {
-            alarmImage.setColorFilter(Color.RED);
-        } else if (severity == SEVERITY_MEDIUM) {
-            alarmImage.setColorFilter(Color.YELLOW);
-        } else if (severity == SEVERITY_NO) {
-            alarmImage.setColorFilter(Color.GREEN);
-        }
+        return severity;
     }
 
     private void vibrate() {
