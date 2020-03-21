@@ -11,25 +11,25 @@ public class RSSI2DISTANCE {
        rot,gelb,gruen;
    }
     public  RSSI2DISTANCE(){
-        this(1.5,2.5);
+        this(150,250);
     }
     public  RSSI2DISTANCE(double lowerTreshold, double upperTreshhold){
         this.lowerTreshold = lowerTreshold;
         this.upperTreshhold = upperTreshhold;
         this.lookUpTable = new ArrayList<RSSI>();
-        this.lookUpTable.add(new RSSI(0.5,-63.08));
-        this.lookUpTable.add(new RSSI(1.0,-66.88));
-        this.lookUpTable.add(new RSSI(1.5,-69.10));
-        this.lookUpTable.add(new RSSI(2.0,-70.68));
-        this.lookUpTable.add(new RSSI(2.5,-71.91));
-        this.lookUpTable.add(new RSSI(3.0,-72.91));
-        this.lookUpTable.add(new RSSI(3.5,-73.75));
-        this.lookUpTable.add(new RSSI(4.0,-74.48));
-        this.lookUpTable.add(new RSSI(4.5,-75.13));
-        this.lookUpTable.add(new RSSI(5.0,-75.71));
+        this.lookUpTable.add(new RSSI(50,-63.08));
+        this.lookUpTable.add(new RSSI(100,-66.88));
+        this.lookUpTable.add(new RSSI(150,-69.10));
+        this.lookUpTable.add(new RSSI(200,-70.68));
+        this.lookUpTable.add(new RSSI(250,-71.91));
+        this.lookUpTable.add(new RSSI(300,-72.91));
+        this.lookUpTable.add(new RSSI(350,-73.75));
+        this.lookUpTable.add(new RSSI(400,-74.48));
+        this.lookUpTable.add(new RSSI(450,-75.13));
+        this.lookUpTable.add(new RSSI(500,-75.71));
     }
     public double getDistance(double rssi){
-        double distance = 5.5;
+        double distance = 550;
         for (RSSI element : this.lookUpTable){
             if (rssi > element.getRssi()){
                 return element.getDistance();
