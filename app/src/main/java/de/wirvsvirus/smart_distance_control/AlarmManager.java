@@ -28,7 +28,7 @@ public class AlarmManager {
         this.alarmImage = alarmImage;
     }
 
-    public void alarm(int distance, int lenght) {
+    public void checkDistance(int distance) {
 
         int severity = getSeverity(distance);
         int drawable = getDrawable(severity);

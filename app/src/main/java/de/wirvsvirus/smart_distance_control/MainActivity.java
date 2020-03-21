@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
                 RSSI2DISTANCE rssi2distance = new RSSI2DISTANCE(1.5,2.5);
+                alarmManager.checkDistance((int) (rssi2distance.getDistance(rssi)));
                 Toast.makeText(getApplicationContext(),"Device Name:" + device.getName() +"  RSSI: " + rssi + "dBm "+"Abstand: "+ rssi2distance.getDistance(rssi) + "cm", Toast.LENGTH_SHORT).show();
             }
         }
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void alarm(View v) {
-        alarmManager.alarm(20,0);
+        alarmManager.checkDistance(20 );
     }
 
 }
