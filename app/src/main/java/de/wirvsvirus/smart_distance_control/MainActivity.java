@@ -11,11 +11,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity {
+
+    private VibrationManager vibrate;
+    private RingManager ring;
+
+
     private BluetoothAdapter BTAdapter;
     public static int REQUEST_BLUETOOTH = 1;
     private CountDownTimer timerBTDiscovery;
@@ -34,7 +40,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         this.BTAdapter = BluetoothAdapter .getDefaultAdapter();
+
+
+       vibrate = new VibrationManager(getApplicationContext());
+        ring = new RingManager(getApplicationContext());
+
+        BTAdapter = BluetoothAdapter .getDefaultAdapter();
+
         if (BTAdapter == null){
             new AlertDialog.Builder(this)
                     .setTitle("Error")
@@ -72,5 +86,14 @@ public class MainActivity extends AppCompatActivity {
         double dDistance = 0.0;
 
         return dDistance;
+    }
+
+
+    public void ring(View v) {
+        ring.ring();
+    }
+
+    public void vibrate(View v) {
+        vibrate.vibrate();
     }
 }
