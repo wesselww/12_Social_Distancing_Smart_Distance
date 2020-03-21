@@ -29,13 +29,18 @@ public class AlarmManager {
     }
 
     public void alarm(int distance, int lenght) {
-        ring();
-        vibrate();
 
         int severity = getSeverity(distance);
         int drawable = getDrawable(severity);
 
         alarmImage.setImageDrawable( ctx.getResources().getDrawable( drawable ) );
+
+        if (severity == SEVERITY_MEDIUM) {
+            vibrate();
+        } else if (severity == SEVERITY_SEVERE) {
+            ring();
+            vibrate();
+        }
     }
 
     private int getDrawable(int severity) {
