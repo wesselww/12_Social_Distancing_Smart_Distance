@@ -2,6 +2,7 @@ package de.wirvsvirus.smart_distance_control;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -21,11 +22,14 @@ public class AlarmManager {
     Ringtone r;
     ImageView alarmImage;
 
+    MediaPlayer mPlayer;
+
     public AlarmManager(Context ctx, ImageView alarmImage) {
         this.ctx = ctx;
         this.notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         this.r = RingtoneManager.getRingtone(ctx, notification);
         this.alarmImage = alarmImage;
+        this.mPlayer = MediaPlayer.create(ctx, R.raw.alarm);
     }
 
     public void checkDistance(int distance) {
@@ -38,8 +42,19 @@ public class AlarmManager {
         if (severity == SEVERITY_MEDIUM) {
             vibrate();
         } else if (severity == SEVERITY_SEVERE) {
-            ring();
+            startAlarm();
             vibrate();
+        } else {
+            stopAlarm();
+        }
+    }
+
+    public void alarmbutton() {
+        if (mPlayer.isPlaying()) {
+            mPlayer.stop();
+        } else {
+            mPlayer = MediaPlayer.create(ctx, R.raw.alarm);
+            mPlayer.start();
         }
     }
 
@@ -76,11 +91,12 @@ public class AlarmManager {
 
     }
 
-    private void ring() {
-        if (r.isPlaying()) {
-            r.stop();
-        } else {
-            r.play();
-        }
+    private void startAlarm() {
+        mPlayer = MediaPlayer.create(ctx, R.raw.alarm);
+        mPlayer.start();
+    }
+
+    private void stopAlarm() {
+        mPlayer.stop();
     }
 }

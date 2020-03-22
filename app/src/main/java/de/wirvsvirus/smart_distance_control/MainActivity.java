@@ -7,7 +7,6 @@ import androidx.appcompat.widget.Toolbar;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,11 +16,8 @@ import android.os.CountDownTimer;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -99,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void alarm(View v) {
-        alarmManager.checkDistance(20 );
+    public void alarmbutton(View v) {
+        alarmManager.alarmbutton();
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
