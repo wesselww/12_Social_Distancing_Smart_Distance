@@ -99,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void alarm(View v) {
-        alarmManager.checkDistance(20 );
+    public void alarmbutton(View v) {
+        alarmManager.alarmbutton();
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

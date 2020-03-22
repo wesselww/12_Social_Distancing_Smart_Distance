@@ -42,8 +42,19 @@ public class AlarmManager {
         if (severity == SEVERITY_MEDIUM) {
             vibrate();
         } else if (severity == SEVERITY_SEVERE) {
-            ring();
+            startAlarm();
             vibrate();
+        } else {
+            stopAlarm();
+        }
+    }
+
+    public void alarmbutton() {
+        if (mPlayer.isPlaying()) {
+            mPlayer.stop();
+        } else {
+            mPlayer = MediaPlayer.create(ctx, R.raw.alarm);
+            mPlayer.start();
         }
     }
 
@@ -80,11 +91,12 @@ public class AlarmManager {
 
     }
 
-    private void ring() {
-        if (mPlayer.isPlaying()) {
-            mPlayer.stop();
-        } else {
-            mPlayer.start();
-        }
+    private void startAlarm() {
+        mPlayer = MediaPlayer.create(ctx, R.raw.alarm);
+        mPlayer.start();
+    }
+
+    private void stopAlarm() {
+        mPlayer.stop();
     }
 }
