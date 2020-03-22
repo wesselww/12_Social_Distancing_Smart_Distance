@@ -1,6 +1,5 @@
 package de.wirvsvirus.smart_distance_control;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -12,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Menu;
@@ -22,7 +22,14 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String APP_TAG = "smartdistancecontrol" ;
+
     private AlarmManager alarmManager;
+
+    private int tvMinDistance = 0;
+    private int tvOptDistance = 0;
+    private int tvMaxRSSI = 0;
+    private int tvMinRSSI = 0;
 
 
     private BluetoothAdapter BTAdapter;
@@ -34,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
-                RSSI2DISTANCE rssi2distance = new RSSI2DISTANCE(1.5, 2.5);
+                //RSSI2DISTANCE rssi2distance = new RSSI2DISTANCE(1.5, 2.5);
+                RSSI2DISTANCE rssi2distance = new RSSI2DISTANCE(tvMinDistance / 100, tvOptDistance / 100);
                 alarmManager.checkDistance((int) (rssi2distance.getDistance(rssi)));
                 Toast.makeText(getApplicationContext(), "Device Name:" + device.getName() + "  RSSI: " + rssi + "dBm " + "Abstand: " + rssi2distance.getDistance(rssi) + "cm", Toast.LENGTH_SHORT).show();
             }
@@ -46,9 +54,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initSettings();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
         this.BTAdapter = BluetoothAdapter.getDefaultAdapter();
 
 
@@ -120,6 +129,22 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
+    }
+
+    public void onResume() {
+        super.onResume();
+
+        initSettings();
+    }
+
+    private void initSettings() {
+
+        SharedPreferences settings = getSharedPreferences(MainActivity.APP_TAG, MODE_PRIVATE);
+
+        tvMinDistance = settings.getInt("tvMinDistance", 150);
+        tvOptDistance = settings.getInt("tvOptDistance", 200);
+        tvMaxRSSI = settings.getInt("tvMaxRSSI", -40);
+        tvMinRSSI = settings.getInt("tvMinRSSI", -80);
     }
 
 }
