@@ -1,7 +1,6 @@
 package de.wirvsvirus.smart_distance_control;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
