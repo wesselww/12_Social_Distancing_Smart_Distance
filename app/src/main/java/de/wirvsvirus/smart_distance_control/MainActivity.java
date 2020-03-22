@@ -1,9 +1,9 @@
 package de.wirvsvirus.smart_distance_control;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Menu;
@@ -21,7 +22,14 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String APP_TAG = "smartdistancecontrol" ;
+
     private AlarmManager alarmManager;
+
+    private int tvMinDistance = 0;
+    private int tvOptDistance = 0;
+    private int tvMaxRSSI = 0;
+    private int tvMinRSSI = 0;
 
 
     private BluetoothAdapter BTAdapter;
@@ -32,30 +40,33 @@ public class MainActivity extends AppCompatActivity {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
-                RSSI2DISTANCE rssi2distance = new RSSI2DISTANCE(1.5,2.5);
+                int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
+                //RSSI2DISTANCE rssi2distance = new RSSI2DISTANCE(1.5, 2.5);
+                RSSI2DISTANCE rssi2distance = new RSSI2DISTANCE(tvMinDistance / 100, tvOptDistance / 100);
                 alarmManager.checkDistance((int) (rssi2distance.getDistance(rssi)));
-                Toast.makeText(getApplicationContext(),"Device Name:" + device.getName() +"  RSSI: " + rssi + "dBm "+"Abstand: "+ rssi2distance.getDistance(rssi) + "cm", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Device Name:" + device.getName() + "  RSSI: " + rssi + "dBm " + "Abstand: " + rssi2distance.getDistance(rssi) + "cm", Toast.LENGTH_SHORT).show();
             }
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initSettings();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        this.BTAdapter = BluetoothAdapter .getDefaultAdapter();
+        this.BTAdapter = BluetoothAdapter.getDefaultAdapter();
 
 
-       alarmManager = new AlarmManager(getApplicationContext(), (ImageView) findViewById(R.id.alarm_icon));
+        alarmManager = new AlarmManager(getApplicationContext(), (ImageView) findViewById(R.id.alarm_icon));
 
 
-        BTAdapter = BluetoothAdapter .getDefaultAdapter();
+        BTAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        if (BTAdapter == null){
+        if (BTAdapter == null) {
             new AlertDialog.Builder(this)
                     .setTitle("Error")
                     .setMessage("Your phone does not support Bluetooth")
@@ -63,32 +74,34 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             System.exit(0);
                         }
-                     })
+                    })
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
         }
         this.enableBluetooth();
         registerReceiver(bReciever, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-            this.timerBTDiscovery = new CountDownTimer(10000,1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
+        this.timerBTDiscovery = new CountDownTimer(10000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
 
-                }
+            }
 
-                @Override
-                public void onFinish() {
-                    BTAdapter.startDiscovery() ;
-                    timerBTDiscovery.start();
-                }
-            }.start();
+            @Override
+            public void onFinish() {
+                BTAdapter.startDiscovery();
+                timerBTDiscovery.start();
+            }
+        }.start();
     }
-    protected void enableBluetooth(){
-        if (!this.BTAdapter.isEnabled()){
-            Intent enableBT = new Intent (BluetoothAdapter.ACTION_REQUEST_ENABLE);
+
+    protected void enableBluetooth() {
+        if (!this.BTAdapter.isEnabled()) {
+            Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBT, REQUEST_BLUETOOTH);
         }
     }
-    protected double getDistance(int rssi){
+
+    protected double getDistance(int rssi) {
         double dDistance = 0.0;
 
         return dDistance;
@@ -98,9 +111,10 @@ public class MainActivity extends AppCompatActivity {
     public void alarmbutton(View v) {
         alarmManager.alarmbutton();
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.tbSettings:
                 startActivity(new Intent(MainActivity.this, Settings.class));
                 break;
@@ -109,11 +123,28 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
+    }
+
+    public void onResume() {
+        super.onResume();
+
+        initSettings();
+    }
+
+    private void initSettings() {
+
+        SharedPreferences settings = getSharedPreferences(MainActivity.APP_TAG, MODE_PRIVATE);
+
+        tvMinDistance = settings.getInt("tvMinDistance", 150);
+        tvOptDistance = settings.getInt("tvOptDistance", 200);
+        tvMaxRSSI = settings.getInt("tvMaxRSSI", -40);
+        tvMinRSSI = settings.getInt("tvMinRSSI", -80);
     }
 
 }

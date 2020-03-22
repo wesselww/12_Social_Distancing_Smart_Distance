@@ -10,9 +10,7 @@ public class RSSI2DISTANCE {
    enum Farbe{
        rot,gelb,gruen;
    }
-    public  RSSI2DISTANCE(){
-        this(150,250);
-    }
+
     public  RSSI2DISTANCE(double lowerTreshold, double upperTreshhold){
         this.lowerTreshold = lowerTreshold;
         this.upperTreshhold = upperTreshhold;
